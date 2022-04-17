@@ -3,15 +3,19 @@ include_once 'USER.php';
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
-    
+    if(!empty($_POST['username']) && $_POST['password']){
     
      $user = new User();
      $user->username = $_POST['username'];
      $user->password = $_POST['password'];
+
+     session_start();
+     $_SESSION['username'] = $user->username;
+
      
      $user->login($user->username , $user->password);
 
-}
+}}
 
 
 ?>
@@ -48,7 +52,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
                         <div class="col-12">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="rememberMe">
+                                <input name="remember_me" class="form-check-input" type="checkbox" id="rememberMe">
                                 <label class="form-check-label" for="rememberMe"> Remember me</label>
                             </div>
                         </div>
