@@ -1,5 +1,9 @@
 <?php 
-include_once 'USER.php';
+session_start();
+if(empty($_SESSION['username'])){
+  header('location: signin.php');
+}
+include 'user.class.php';
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
@@ -12,21 +16,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
      $user->insert();
      header("location: signin.php");
      exit;
-
 }}
 
-
 ?>
-
 
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>How To Create Simple Login Form Design In Bootstrap 5</title>
+    <title>Sign Up - Contact List</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">    
-    <link rel="stylesheet" href="https://www.markuptag.com/bootstrap/5/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">

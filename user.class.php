@@ -2,6 +2,7 @@
 
 class User
 {
+   
    public $username;
    public $password;
 
@@ -13,7 +14,7 @@ class User
       $dbname = "oop_contact";
 
       $username = $this->username;
-      $password = hash('sha256', $this->password);
+      $password = hash('sha256', $this->password); 
 
 
       $conn = new PDO("mysql:host=$servername;dbname=$dbname", $user, $pass);
@@ -32,18 +33,28 @@ class User
       $password = hash('sha256', $password);
 
       $conn = new PDO("mysql:host=$servername;dbname=$dbname", $user, $pass);
-      $sql = "SELECT *  FROM users WHERE username = ? AND password= ?";
+      $sql = ("SELECT *  FROM users WHERE username = ? AND password= ?");
       $stmt = $conn->prepare($sql);
       $stmt->execute([$username, $password]);
       $count = $stmt->rowCount();
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+      
+      
+      
       if ($count == 1) {
+         $_SESSION['id'] = $result['id'];
+         $_SESSION['username'] =  $result['username'];   
+         $_SESSION['signupDate'] = $result['signupDate'];  
          header("location: index.php");
-      }
+         exit;
+      } else {
+         header("location: signin.php?err=zbi");
+         exit;      }
    }
 
-   public function logout(){
-      session_start();
-      session_destroy();
-      header("location: signin.php");
-   }
+
+
+
+   
+   
 }

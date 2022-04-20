@@ -6,7 +6,7 @@ const userError = document.getElementById('userError')
 const passError = document.getElementById('passError')
 const confpassError = document.getElementById('confpassError')
 const userregex = /^[A-Za-z]\w{2,20}$/;
-const passregex = /^[A-Za-z1-9]\w{4,20}$/;
+const passregex = /^[A-Za-z1-9]$/;
 
 
 
@@ -16,7 +16,7 @@ const passregex = /^[A-Za-z1-9]\w{4,20}$/;
    form.addEventListener('submit', (e) => {
       if (username.value == '') {
          e.preventDefault()
-         userError.innerHTML = "UserName Feild Connot be Empty"
+         userError.innerHTML = " Empty feild"
       }
       else if (!username.value.match(userregex)) {
          e.preventDefault()
@@ -42,12 +42,11 @@ const passregex = /^[A-Za-z1-9]\w{4,20}$/;
       } else if (password.value != confpassword.value) {
          e.preventDefault()
          confpassError.innerHTML = "Password Not Match"
-      }
-
-
-      else if (confpassword.value.lenght != 0) {
+      } else if (confpassword.value.lenght != 0) {
          confpassError.innerHTML = ""
       }
+
+      
 
 
 

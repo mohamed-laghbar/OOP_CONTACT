@@ -1,7 +1,15 @@
-<?php include 'USER.php';
+<?php ;
 session_start();
+if(empty($_SESSION['username'])){
+  header('location: signin.php');
+}
+include 'user.class.php';
  
 $username = $_SESSION['username'] ;
+$signupDate = $_SESSION['signupDate'];
+$_SESSION['date'] = date("Y-m-d H:i:s", strtotime('-2 hours'));
+
+
 ?>
 
 <!DOCTYPE html>
@@ -11,19 +19,19 @@ $username = $_SESSION['username'] ;
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">    
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://www.markuptag.com/bootstrap/5/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
 <nav class="navbar navbar-dark bg-dark d-flex flex-row
- row">
-  <h2 class="text-white col-3 ms-2">Contact List</h2>
+ row" method="POST">
+ <a href="index.php" class="text-white h3 col-3 text-decoration-none ms-2">Contact List</a> 
 
   <div class="col-6 mt-3" >
-    <ul class="text-white d-flex list-unstyled justify-content-around" >
+    <div class="text-white d-flex list-unstyled justify-content-around" >
       <li class="h5 ">Welcome <?php echo $username ?></li>
-      <li class="h6">Contact<a href="contact.php"></a></li>
-      <li class="h6">Logout</li>
-    </ul>
+      <li class="h6"><a class="text-decoration-none text-white" href="contact.php">Contact</a></li>
+      <li class="h6"><a class="text-decoration-none text-white" href="logout.php">Logout</a> </li>
+    </div>
   </div>
 </nav>
 <section class="w-75 mt-5 d-flex flex-column mx-auto ">
@@ -34,7 +42,7 @@ $username = $_SESSION['username'] ;
 <hr class="bg-danger border-2 border-top border-danger">
 <p class="h5 fw-bold ">SignUp Date : <?php echo $signupDate ?></p>
 <hr class="bg-danger border-2 border-top border-danger">
-<p class="h5 fw-bold">Last Login : <?php echo $lastLogin ?></p>
+<p class="h5 fw-bold">Last Login : <?php echo $_SESSION['date'] ?></p>
 </section>
 
 

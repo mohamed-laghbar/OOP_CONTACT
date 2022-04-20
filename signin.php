@@ -1,19 +1,17 @@
 <?php 
-include_once 'USER.php';
+session_start();
+include 'user.class.php';
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+if(isset($_POST["submit"])){
 
     if(!empty($_POST['username']) && $_POST['password']){
-    
+        
      $user = new User();
      $user->username = $_POST['username'];
      $user->password = $_POST['password'];
-
      session_start();
-     $_SESSION['username'] = $user->username;
-
-     
      $user->login($user->username , $user->password);
+     
 
 }}
 
@@ -25,11 +23,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>How To Create Simple Login Form Design In Bootstrap 5</title>
+    <title>Sign in - Contact List</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">    
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://www.markuptag.com/bootstrap/5/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
 
@@ -41,13 +39,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <h4>Welcome Back</h4>
                         <div class="col-12">
                             <label>UserName</label>
-                            <input type="text" id="username" name="username" class="form-control" placeholder="Username">
-                            <div class="text-danger" id="userError"></div>
+                            <input type="text"  name="username" class="form-control" placeholder="Username">
+                            <div class="text-danger" ></div>
                         </div>
                         <div class="col-12">
                             <label>Password</label>
-                            <input type="password" id="password" name="password" class="form-control" placeholder="Password">
-                            <div class="text-danger" id="passError"></div>
+                            <input type="password" name="password" class="form-control" placeholder="Password">
+                            <div class="text-danger"></div>
 
                         </div>
                         <div class="col-12">
@@ -57,7 +55,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             </div>
                         </div>
                         <div class="col-12">
-                            <input type="submit" class="btn btn-dark float-end" value="Login">
+                            <input type="submit" name="submit" class="btn btn-dark float-end" value="Login">
                         </div>
                     </form>
                     <hr class="mt-4">
