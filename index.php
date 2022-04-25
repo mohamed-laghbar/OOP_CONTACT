@@ -2,6 +2,7 @@
 session_start();
 if(empty($_SESSION['username'])){
   header('location: signin.php');
+  exit;
 }
 include 'user.class.php';
  

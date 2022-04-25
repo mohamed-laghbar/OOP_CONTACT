@@ -2,6 +2,7 @@
 session_start();
 if(empty($_SESSION['username'])){
   header('location: signin.php');
+  exit();
 }
 include 'contact.class.php';
 $username = $_SESSION['username'];
@@ -16,6 +17,13 @@ $contact->insertContact($contact->name,$contact->phone,$contact->email, $contact
 
 }
 
+$id = ''; 
+if( isset( $_GET['id'])) {
+    $id = $_GET['id']; 
+    $objt = new Contact();
+  $objt->delete($id);
+} 
+
 
 ?>
 <!DOCTYPE html>
@@ -28,6 +36,8 @@ $contact->insertContact($contact->name,$contact->phone,$contact->email, $contact
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -43,7 +53,7 @@ $contact->insertContact($contact->name,$contact->phone,$contact->email, $contact
     </div>
   </div>
 </nav>
-  <section class="w-75 mx-auto mt-5">
+  <form method="POST" class="w-75 mx-auto mt-5">
     <table class="table caption-top">
       <h2 class="mb-4">
         Contact List:
@@ -65,53 +75,108 @@ $contact->insertContact($contact->name,$contact->phone,$contact->email, $contact
         while($contact = $stmt->fetch(PDO::FETCH_OBJ)){
         ?>
         <tr>
-          <td><?php echo $contact->name?></td>
-          <td><?php echo $contact->phone?></td>
-          <td><?php echo $contact->email?></td>
-          <td><?php echo $contact->addresse?> </td>
+          <td id="name-<?php echo $contact->id?>"><?php echo $contact->name?></td>
+          <td id="phone-<?php echo $contact->id?>"><?php echo $contact->phone?></td>
+          <td id="email-<?php echo $contact->id?>"><?php echo $contact->email?></td>
+          <td id="addr-<?php echo $contact->id?>"><?php echo $contact->addresse?> </td>
           <td class="d-flex fs-4 text-info border-0 text-end">
-             <i class="bi bi-pencil me-3"></i>
-            <i class="bi bi-trash"></i>
+             <i class="bi bi-pencil  me-3" attr-id="<?php echo $contact->id?>" data-bs-toggle="modal" data-bs-target="#myModal"></i>
+            <a href="contact.php?id=<?php echo $contact->id ?>"><i class="bi bi-trash text-danger"></i></a>
           </td>
 
         </tr>
         <?php }   ?>
       </tbody>
     </table>
-  </section>
+  </form>
+
+<section>
+
+<div class="container mt-5"> 
+        <div class="modal" id="myModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title h3">Edit Contact</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id='modal-form' method="POST">
+                            <div class="mb-3">
+                                <label class="form-label required">Name</label>
+                                <input name="name" id='e-name' type="text" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label required">Phone</label>
+                                <input name="phone" id='e-phone' type="number" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label required">Email</label>
+                                <input name="email" id='e-email' type="email" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label required">Addresse</label>
+                                <textarea name="addresse" id='e-addr' class="form-control"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" val='' name='e-id'>
+                        <button name="submit" form='modal-form' type="submit" class="btn btn-primary">Submit</button>
+                        <button  data-bs-dismiss="modal" class="btn btn-danger">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
   <section class="mt-5 w-50 mb-5 mx-auto p-4 shadow bg-light  ">
     <form method="POST" id="form" >
       <div class="row mb-4">
         <div class="col">
           <div class="form-outline">
-            <label class="form-label" for="form6Example1">Full Name<span class="text-danger">*</span></label>
-            <input type="text" name="name" placeholder="Full Name" id="username" class="form-control" />
-            <div id="userError"  class="text-danger"></div>        
+            <label class="form-label" for="form6Example1">Name<span class="text-danger">*</span></label>
+            <input type="text" name="name" placeholder=" Name" id="username" class="form-control" />
+            <div id="userError" class="text-danger"></div>        
           </div>
         </div>
       </div>
 
       <div class="form-outline mb-4">
         <label class="form-label" for="form6Example6">Phone<span class="text-danger">*</span></label>
-        <input type="number" name="phone" placeholder="Phone" id="form6Example6" class="form-control" />
+        <input type="phone" name="phone" placeholder="Phone" id="cphone" class="form-control" />
+          <div id="phoneError" class="text-danger "></div>
       </div>
+
 
       <div class="form-outline mb-4">
         <label class="form-label" for="form6Example4">Email<span class="text-danger">*</span></label>
-        <input type="text" name="email" placeholder="Email" id="form6Example4" class="form-control" />
+        <input type="text" name="email" placeholder="Email" id="cemail" class="form-control" />
+          <div class="text-danger" id="mailError"></div>
       </div>
 
 
       <div class="form-outline mb-4">
         <label class="form-label" for="form6Example7">Address<span class="text-danger">*</span></label>
-        <textarea class="form-control" name="addresse" id="form6Example7" rows="3"></textarea>
+        <textarea class="form-control" name="addresse" id="caddresse" rows="3"></textarea>
+          <div id="adrError" class="text-danger"></div>
       </div>
 
       <input type="submit" name="save" class="btn btn-primary btn-block mb-4">
     </form>
   </section>
-
 <script src="main.js"></script>
+
+<script>
+  $('#myModal').on('show.bs.modal', (e) => {
+    let id = e.relatedTarget.getAttribute('attr-id');
+    $('#e-name').val($(`#name-${id}`).text());
+    $('#e-phone').val($(`#phone-${id}`).text());
+    $('#e-email').val($(`#email-${id}`).text());
+    $('#e-addr').val($(`#addr-${id}`).text());
+});
+</script>
+
 </body>
 </html>

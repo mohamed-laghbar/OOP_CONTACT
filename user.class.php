@@ -42,13 +42,18 @@ class User
       
       
       if ($count == 1) {
+         if(!empty(['remember_me'])){
+            setcookie('username', $_POST['username'] , time()+3600*24,"/"); 
+            setcookie('password', $_POST['username'] , time()+3600*24,"/");
+        }
+        
          $_SESSION['id'] = $result['id'];
          $_SESSION['username'] =  $result['username'];   
          $_SESSION['signupDate'] = $result['signupDate'];  
-         header("location: index.php");
+        header("location: index.php");
          exit;
       } else {
-         header("location: signin.php?err=zbi");
+         header("location: signin.php");
          exit;      }
    }
 

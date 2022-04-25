@@ -1,6 +1,8 @@
 <?php
 
-class Contact{
+
+
+class Contact {
 public $name;
 public $phone;
 public $email;
@@ -11,8 +13,8 @@ function insertContact($name , $phone , $email , $addresse){
   $user = "root";
   $pass = "";
   $dbname = "oop_contact";
+  $conn = new PDO("mysql:host=$servername;dbname=$dbname", $user, $pass);
 
-$conn = new PDO("mysql:host=$servername;dbname=$dbname", $user, $pass);
 $user_id = $_SESSION['id'];
 $name = $this->name;
 $phone = $this->phone;
@@ -22,6 +24,8 @@ $addresse = $this->addresse;
   $query = ("INSERT into contact (name , phone , email , addresse , user_id ) VALUES (?,?,?,?,?)");
   $stmt = $conn->prepare($query);
      $stmt->execute([$name,$phone,$email,$addresse ,$user_id]);
+     header('location: contact.php');
+     exit();
 }
 
 
@@ -38,6 +42,19 @@ $user_id = $_SESSION['id'];
   $stmt->execute();
   return $stmt;
  
+}
+
+public static function delete($id){
+  $servername = "Localhost";
+  $user = "root";
+  $pass = "";
+  $dbname = "oop_contact";
+$conn = new PDO("mysql:host=$servername;dbname=$dbname", $user, $pass);
+$user_id = $_SESSION['id'];
+
+  $sql = ("DELETE FROM contact WHERE id ='$id' ");
+  $stmt = $conn->prepare($sql);
+  $stmt->execute();
 }
 
 

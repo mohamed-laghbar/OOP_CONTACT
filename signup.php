@@ -1,8 +1,5 @@
 <?php 
-session_start();
-if(empty($_SESSION['username'])){
-  header('location: signin.php');
-}
+
 include 'user.class.php';
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
